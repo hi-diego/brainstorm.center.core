@@ -13,6 +13,8 @@ declare class Notebook {
     load(notebookName?: string): void;
     reload(notebookName?: string): void;
     mentions(note: Note): Immutable.Set<Mention>;
+    getMentionsOf(note: Note): Immutable.Set<Mention>;
     references(note: Note): Immutable.Set<Note | undefined>;
+    getReferencesOf(note: Note): Immutable.Set<Note | undefined>;
 }
 export default Notebook;

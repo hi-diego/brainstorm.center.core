@@ -41,14 +41,15 @@ function updateDictionary(note, dictionary, oldNote) {
 }
 exports.updateDictionary = updateDictionary;
 function mentions(note, notes) {
+    console.log(notes.toArray(), note.words().toArray());
     return notes
-        .filter((v, k) => note.words().has(k))
+        .filter((v, k) => note.words().has(k.toLowerCase()))
         .toSet()
-        .map(n => new Mention_1.default(note, n, n.title))
+        .map(n => new Mention_1.default(note, n, n.title.toLowerCase()))
         .concat(note.mentions);
 }
 exports.mentions = mentions;
 function references(note, notes, dictionary) {
-    return dictionary.get(note.title, immutable_1.default.Set()).map(title => notes.get(title));
+    return dictionary.get(note.title.toLowerCase(), immutable_1.default.Set()).map(title => notes.get(title.toLowerCase()));
 }
 exports.references = references;

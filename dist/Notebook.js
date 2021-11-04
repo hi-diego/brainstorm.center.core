@@ -17,7 +17,7 @@ class Notebook {
         const oldNote = this.notes.get(n.title) || new Note_1.default('', '');
         const note = n.clone(oldNote);
         const dictionary = this.updateDictionary(note, oldNote);
-        const notes = this.notes.set(note.title, note);
+        const notes = this.notes.set(note.title.toLowerCase(), note);
         return new Notebook(notes, dictionary);
     }
     getLocalStorageName() {
@@ -46,8 +46,14 @@ class Notebook {
     mentions(note) {
         return Utils_1.mentions(note, this.notes);
     }
+    getMentionsOf(note) {
+        return this.mentions(note);
+    }
     references(note) {
         return Utils_1.references(note, this.notes, this.dictionary);
+    }
+    getReferencesOf(note) {
+        return this.references(note);
     }
 }
 exports.default = Notebook;

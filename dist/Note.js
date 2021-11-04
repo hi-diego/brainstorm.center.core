@@ -16,7 +16,7 @@ class Note extends NotebookItem_1.default {
         this.content = content;
     }
     words(prev = false) {
-        const words = this.content.split(' ');
+        const words = this.content.toLowerCase().replace(/((\W)(\s|$))/g, '').split(/\s+/g) || [];
         return immutable_1.default.Set(words);
     }
     clone(from) {

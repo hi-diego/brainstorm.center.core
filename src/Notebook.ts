@@ -109,10 +109,24 @@ class Notebook {
   }
 
   /**
+   * Alias of mentions
+   */
+  public getMentionsOf(note: Note) : Immutable.Set<Mention> {
+    return this.mentions(note);
+  }
+
+  /**
    * Return all the notes that reference this note by the title.
    */
-  public references (note: Note) : Immutable.Set<Note|undefined> {
+  public references(note: Note) : Immutable.Set<Note|undefined> {
     return references(note, this.notes, this.dictionary);
+  }
+
+  /**
+   * Alias of references
+   */
+  public getReferencesOf(note: Note) : Immutable.Set<Note|undefined> {
+    return this.references(note);
   }
 }
 
