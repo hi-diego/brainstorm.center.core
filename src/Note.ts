@@ -24,7 +24,7 @@ class Note extends NotebookItem {
    * Return all the words in the content.
    */
   public words (prev: boolean = false) : Immutable.Set<string> {
-    const words = this.content.toLowerCase().replace(/((\W)\s)/g, '').split(/\s+/g) || [];
+    const words = this.content.toLowerCase().replace(/((\W)(\s|$))/g, '').split(/\s+/g) || [];
     return Immutable.Set<string>(words);
   }
 

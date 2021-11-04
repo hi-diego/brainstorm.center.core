@@ -55,10 +55,11 @@ export function updateDictionary(note: Note, dictionary: Immutable.Map<string, I
  * Return all the title notes that this note mentions in its content.
  */
 export function mentions(note: Note, notes: Immutable.Map<string, Note>) : Immutable.Set<Mention> {
+  console.log(notes.toArray(), note.words().toArray());
   return notes
-    .filter((v, k) => note.words().has(k))
+    .filter((v, k) => note.words().has(k.toLowerCase()))
     .toSet()
-    .map(n => new Mention(note, n, n.title))
+    .map(n => new Mention(note, n, n.title.toLowerCase()))
     .concat(note.mentions);
 }
 
@@ -66,5 +67,5 @@ export function mentions(note: Note, notes: Immutable.Map<string, Note>) : Immut
  * Return all the notes that reference this note by the title.
  */
 export function references (note: Note, notes: Immutable.Map<string, Note>, dictionary: Immutable.Map<string, Immutable.Set<string>>) : Immutable.Set<Note|undefined> {
-  return dictionary.get(note.title, Immutable.Set<string>()).map(title => notes.get(title))
+  return dictionary.get(note.title.toLowerCase(), Immutable.Set<string>()).map(title => notes.get(title.toLowerCase()))
 }
