@@ -41,6 +41,7 @@ class Notebook {
     this.notes = notes || Immutable.Map<string, Note>();
     this.dictionary = dictionary || Immutable.Map<string, Immutable.Set<string>>();
     this.name = 'root';
+    // console.log(this.notes, this.dictionary);
     this.onUpdate = () => null;
   }
 
@@ -48,10 +49,12 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public update(note: Note): Notebook {
-    const dictionary = this.updateDictionary(note);
+  public update(n: Note): Notebook {
+    const oldNote = this.notes.get(n.title) || new Note('', '');
+    const note = n.clone(oldNote);
+    const dictionary = this.updateDictionary(note, oldNote);
     const notes = this.notes.set(note.title, note);
-    window.localStorage.setItem(this.getLocalStorageName(), JSON.stringify(this.notes.toJSON()));
+    // window.localStorage.setItem(this.getLocalStorageName(), JSON.stringify(this.notes.toJSON()));
     return new Notebook(notes, dictionary);
   }
 
@@ -70,8 +73,8 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public updateDictionary(note: Note): Immutable.Map<string, Immutable.Set<string>> {
-    return updateDictionary(note, this.dictionary);
+  public updateDictionary(note: Note, oldNote: Note): Immutable.Map<string, Immutable.Set<string>> {
+    return updateDictionary(note, this.dictionary, oldNote);
   }
 
   /**

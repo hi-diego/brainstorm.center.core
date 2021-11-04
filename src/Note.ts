@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import Mention from './Mention';
+console.log("Mention", Mention);
 import NotebookItem from './NotebookItem';
 
 /**
@@ -25,6 +26,13 @@ class Note extends NotebookItem {
   public words (prev: boolean = false) : Immutable.Set<string> {
     const words = this.content.split(' ');
     return Immutable.Set<string>(words);
+  }
+
+  /**
+   * Return all the words in the content.
+   */
+  public clone (from?: Note) : Note {
+    return new Note(this.title, this.content, (from && from.uuid) || this.uuid, this.mentions, this.createdAt, this.modifiedAt);
   }
 }
 

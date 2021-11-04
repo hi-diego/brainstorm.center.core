@@ -1,6 +1,6 @@
 import { uuid } from './Utils';
 
-export default class NotebookItem {
+class NotebookItem {
   public uuid: string;
   public createdAt: Date;
   public modifiedAt: Date;
@@ -10,3 +10,5 @@ export default class NotebookItem {
     this.modifiedAt = this.createdAt;
   }
 }
+
+export default NotebookItem;
