@@ -53,7 +53,7 @@ class Notebook {
     const oldNote = this.notes.get(n.title) || new Note('', '');
     const note = n.clone(oldNote);
     const dictionary = this.updateDictionary(note, oldNote);
-    const notes = this.notes.set(note.title, note);
+    const notes = this.notes.set(note.title.toLowerCase(), note);
     // window.localStorage.setItem(this.getLocalStorageName(), JSON.stringify(this.notes.toJSON()));
     return new Notebook(notes, dictionary);
   }
