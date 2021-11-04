@@ -55,7 +55,7 @@ export function updateDictionary(note: Note, dictionary: Immutable.Map<string, I
  * Return all the title notes that this note mentions in its content.
  */
 export function mentions(note: Note, notes: Immutable.Map<string, Note>) : Immutable.Set<Mention> {
-  console.log(notes.toArray(), note.words().toArray());
+  // console.log(notes.toArray(), note.words().toArray());
   return notes
     .filter((v, k) => note.words().has(k.toLowerCase()))
     .toSet()

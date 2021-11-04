@@ -49,13 +49,38 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public update(n: Note): Notebook {
-    const oldNote = this.notes.get(n.title) || new Note('', '');
-    const note = n.clone(oldNote);
-    const dictionary = this.updateDictionary(note, oldNote);
+  public update(note: Note): Notebook {
+    const oldNote = this.get(note.title);
+    const dictionary = this.updateDictionary(note, oldNote || new Note('', ''));
     const notes = this.notes.set(note.title.toLowerCase(), note);
     // window.localStorage.setItem(this.getLocalStorageName(), JSON.stringify(this.notes.toJSON()));
     return new Notebook(notes, dictionary);
+  }
+
+  /**
+   * Add or Update the given note to the notebook:
+   * this will recalculate all the mentionses as well.
+   */
+  public get(title: string): Note|undefined {
+    return this.notes.get(title.toLowerCase());
+  }
+
+  /**
+   * Add or Update the given note to the notebook:
+   * this will recalculate all the mentionses as well.
+   */
+  public set(note: Note) {
+    this.notes.set(note.title.toLowerCase(), note);
+  }
+
+  /**
+   * Add or Update the given note to the notebook:
+   * this will recalculate all the mentionses as well.
+   */
+  public add(notes: Note[]): Notebook {
+    var notebook: Notebook = this;
+    notes.forEach((note: Note) => (notebook = notebook.update(note)));
+    return notebook;
   }
 
   /**

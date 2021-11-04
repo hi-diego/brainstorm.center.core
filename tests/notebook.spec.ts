@@ -2,7 +2,7 @@ import Notebook from '../src/Notebook';
 import Note from '../src/Note';
 import { expect } from 'chai';
 
-console.log('Notebook', Notebook);
+// console.log('Notebook', Notebook);
 describe('Notebook', () => {
   it('#new', () => {
     const notebook = new Notebook();
@@ -10,18 +10,14 @@ describe('Notebook', () => {
     expect(notebook.notes.size).to.equal(0);
   });
   it('#update', () => {
-    const _ = new Notebook();
-    const note = new Note('title', 'content');
-    const notebook = _.update(note);
+    const notebook = new Notebook().update(new Note('title', 'content'));
     expect(notebook.dictionary.size).to.equal(1);
     expect(notebook.notes.size).to.equal(1);
   });
   it('#add', () => {
-    const _ = new Notebook();
     const note = new Note('title', 'content');
     const _note = new Note('title2', 'title content');
-    const __ = _.update(note);
-    const notebook = __.update(_note);
+    const notebook = new Notebook().update(note).update(_note);
     const wordSet = notebook.dictionary.get('content');
 
     expect(notebook.notes.size).to.equal(2);
@@ -37,13 +33,10 @@ describe('Notebook', () => {
     expect(notebook.mentions(note).size).to.equal(0);
   });
   it('#remove words, mentionds and references', () => {
-    const _ = new Notebook();
     const note = new Note('title', 'content');
     const _note = new Note('title2', 'title content');
     const _noteUpdate = new Note('title2', 'content');
-    const __ = _.update(note);
-    const ___ = __.update(_note);
-    const notebook = ___.update(_noteUpdate);
+    const notebook = new Notebook().update(note).update(_note).update(_noteUpdate);
     const wordSet = notebook.dictionary.get('content');
 
     expect(notebook.notes.size).to.equal(2);
