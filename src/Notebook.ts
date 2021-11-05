@@ -49,9 +49,9 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public update(note: Note): Notebook {
+  public update(note: Note, oldWords?: Immutable.Set<string>): Notebook {
     const oldNote = this.get(note.title);
-    const dictionary = this.updateDictionary(note, oldNote || new Note('', ''));
+    const dictionary = this.updateDictionary(note, oldWords || (oldNote ? oldNote.words() : Immutable.Set<string>([])));
     const notes = this.notes.set(note.title.toLowerCase(), note);
     // window.localStorage.setItem(this.getLocalStorageName(), JSON.stringify(this.notes.toJSON()));
     return new Notebook(notes, dictionary);
@@ -98,8 +98,8 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public updateDictionary(note: Note, oldNote: Note): Immutable.Map<string, Immutable.Set<string>> {
-    return updateDictionary(note, this.dictionary, oldNote);
+  public updateDictionary(note: Note, oldWords: Immutable.Set<string>): Immutable.Map<string, Immutable.Set<string>> {
+    return updateDictionary(note, this.dictionary, oldWords);
   }
 
   /**

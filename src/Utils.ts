@@ -36,9 +36,9 @@ export function uuid () : string {
 /**
  * Recalculate the given dictionary for the given note.
  */
-export function updateDictionary(note: Note, dictionary: Immutable.Map<string, Immutable.Set<string>>, oldNote: Note): Immutable.Map<string, Immutable.Set<string>> {
+export function updateDictionary(note: Note, dictionary: Immutable.Map<string, Immutable.Set<string>>, oldWords: Immutable.Set<string>): Immutable.Map<string, Immutable.Set<string>> {
   var dic = Immutable.Map<string, Immutable.Set<string>>(dictionary); // cloning the map. TODO: convert this var to const.
-  const words = wordsDiff(oldNote.words(), note.words());
+  const words = wordsDiff(oldWords, note.words());
   words.gone.forEach((word: string) => {
     const set = (dic.get(word, Immutable.Set<string>())).delete(note.title)
     if (set.isEmpty()) dic = dic.delete(word);
