@@ -17,7 +17,6 @@ describe('NoteProxy', () => {
     expect(SingletonNotebook.dictionary.size).to.equal(1);
     expect(SingletonNotebook.notes.size).to.equal(1);
     const noteUpdate = new NoteProxy('Title', 'content foo');
-    console.log(SingletonNotebook.dictionary.toArray());
     expect(SingletonNotebook.dictionary.size).to.equal(2);
     expect(SingletonNotebook.notes.size).to.equal(1);
   });
