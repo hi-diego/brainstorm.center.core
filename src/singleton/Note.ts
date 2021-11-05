@@ -64,6 +64,14 @@ class Note extends NotebookItem implements INote {
     Notebook.update(this, words);
   }
   /**
+   * Note class is the holder of Mentions.
+   * @class
+   */
+  public setContent(content: string) {
+    this.content = content;
+    return this;
+  }
+  /**
    * Return all the words in the content.
    */
   public words () : Immutable.Set<string> {
@@ -93,11 +101,8 @@ export default Note;
  */
 export const NoteProxyHandler = {
   construct: (target: any, args: any[]) => {
-    const old = Notebook.get(args[0]);
-    if (old) {
-      old.content = args[1];
-      return old;
-    }
+    const old: any = Notebook.get(args[0]);
+    if (old) return old.setContent(args[1]);
     return new Note(args[0], args[1]);
   }
 };
