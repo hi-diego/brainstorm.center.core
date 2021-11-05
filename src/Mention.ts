@@ -1,4 +1,4 @@
-import Note from './Note';
+import INote from './INote';
 import NotebookItem from './NotebookItem';
 
 /**
@@ -7,12 +7,12 @@ import NotebookItem from './NotebookItem';
  */
 class Mention extends NotebookItem {
 
-  public from: Note;
-  public to: Note;
+  public from: INote;
+  public to: INote;
   public key: string;
   public createdByUser: boolean;
 
-  constructor (from: Note, to: Note, key: string, createdByUser: boolean = false, uuid?: string, createdAt?: Date, modifiedAt?: Date) {
+  constructor (from: INote, to: INote, key: string, createdByUser: boolean = false, uuid?: string, createdAt?: Date, modifiedAt?: Date) {
     super(uuid, createdAt, modifiedAt);
     this.from = from;
     this.to = to;

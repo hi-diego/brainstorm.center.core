@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import Note from './Note';
+import INote from './INote';
 import Mention from './Mention';
 import { wordsDiff, updateDictionary, mentions, references, update } from './Utils';
 
@@ -19,7 +20,7 @@ class Notebook {
    * Notebook.
    * @member
    */
-  public notes: Immutable.Map<string, Note>;
+  public notes: Immutable.Map<string, INote>;
 
   /**
    * Notebook.
@@ -31,14 +32,14 @@ class Notebook {
    * Notebook.
    * @member
    */
-  public onUpdate: (notes: Immutable.Set<Note>) => void;
+  public onUpdate: (notes: Immutable.Set<INote>) => void;
 
   /**
    * Notebook.
    * @constructor
    */
-  constructor (notes?: Immutable.Map<string, Note>, dictionary?: Immutable.Map<string, Immutable.Set<string>>) {
-    this.notes = notes || Immutable.Map<string, Note>();
+  constructor (notes?: Immutable.Map<string, INote>, dictionary?: Immutable.Map<string, Immutable.Set<string>>) {
+    this.notes = notes || Immutable.Map<string, INote>();
     this.dictionary = dictionary || Immutable.Map<string, Immutable.Set<string>>();
     this.name = 'root';
     // console.log(this.notes, this.dictionary);
@@ -49,7 +50,7 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public update(note: Note, oldWords?: Immutable.Set<string>): Notebook {
+  public update(note: INote, oldWords?: Immutable.Set<string>): Notebook {
     return update(this, note, oldWords);
   }
 
@@ -57,7 +58,7 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public get(title: string): Note|undefined {
+  public get(title: string): INote|undefined {
     return this.notes.get(title.toLowerCase());
   }
 
@@ -65,7 +66,7 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public set(note: Note) {
+  public set(note: INote) {
     this.notes.set(note.title.toLowerCase(), note);
   }
 
@@ -73,9 +74,9 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public add(notes: Note[]): Notebook {
+  public add(notes: INote[]): Notebook {
     var notebook: Notebook = this;
-    notes.forEach((note: Note) => (notebook = notebook.update(note)));
+    notes.forEach((note: INote) => (notebook = notebook.update(note)));
     return notebook;
   }
 
@@ -94,7 +95,7 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public updateDictionary(note: Note, oldWords: Immutable.Set<string>): Immutable.Map<string, Immutable.Set<string>> {
+  public updateDictionary(note: INote, oldWords: Immutable.Set<string>): Immutable.Map<string, Immutable.Set<string>> {
     return updateDictionary(note, this.dictionary, oldWords);
   }
 
@@ -118,35 +119,35 @@ class Notebook {
   public reload(notebookName: string = 'root') {
     this.name = notebookName;
     this.dictionary = Immutable.Map<string, Immutable.Set<string>>();
-    this.notes = Immutable.Map<string, Note>();
+    this.notes = Immutable.Map<string, INote>();
     this.load(notebookName);
   }
 
   /**
    * Return all the title notes that this note mentions in its content.
    */
-  public mentions(note: Note) : Immutable.Set<Mention> {
+  public mentions(note: INote) : Immutable.Set<Mention> {
     return mentions(note, this.notes);
   }
 
   /**
    * Alias of mentions
    */
-  public getMentionsOf(note: Note) : Immutable.Set<Mention> {
+  public getMentionsOf(note: INote) : Immutable.Set<Mention> {
     return this.mentions(note);
   }
 
   /**
    * Return all the notes that reference this note by the title.
    */
-  public references(note: Note) : Immutable.Set<Note|undefined> {
+  public references(note: INote) : Immutable.Set<INote|undefined> {
     return references(note, this.notes, this.dictionary);
   }
 
   /**
    * Alias of references
    */
-  public getReferencesOf(note: Note) : Immutable.Set<Note|undefined> {
+  public getReferencesOf(note: INote) : Immutable.Set<INote|undefined> {
     return this.references(note);
   }
 }

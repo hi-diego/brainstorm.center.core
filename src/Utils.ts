@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import Note from './Note';
+import INote from './INote';
 import Mention from './Mention';
 import Notebook from './Notebook';
 
@@ -55,7 +56,7 @@ export function updateDictionary(note: Note, dictionary: Immutable.Map<string, I
 /**
  * Return all the title notes that this note mentions in its content.
  */
-export function mentions(note: Note, notes: Immutable.Map<string, Note>) : Immutable.Set<Mention> {
+export function mentions(note: INote, notes: Immutable.Map<string, INote>) : Immutable.Set<Mention> {
   // console.log(notes.toArray(), note.words().toArray());
   return notes
     .filter((v, k) => note.words().has(k.toLowerCase()))
@@ -67,7 +68,7 @@ export function mentions(note: Note, notes: Immutable.Map<string, Note>) : Immut
 /**
  * Return all the notes that reference this note by the title.
  */
-export function references (note: Note, notes: Immutable.Map<string, Note>, dictionary: Immutable.Map<string, Immutable.Set<string>>) : Immutable.Set<Note|undefined> {
+export function references (note: INote, notes: Immutable.Map<string, INote>, dictionary: Immutable.Map<string, Immutable.Set<string>>) : Immutable.Set<INote|undefined> {
   return dictionary.get(note.title.toLowerCase(), Immutable.Set<string>()).map(title => notes.get(title.toLowerCase()))
 }
 
@@ -76,9 +77,22 @@ export function references (note: Note, notes: Immutable.Map<string, Note>, dict
  * Add or Update the given note to the notebook:
  * this will recalculate all the mentionses as well.
  */
-export function update(notebook: Notebook, note: Note, oldWords?: Immutable.Set<string>) : Notebook {
+export function update(notebook: Notebook, note: INote, oldWords?: Immutable.Set<string>) : Notebook {
   const oldNote = notebook.get(note.title);
   const dictionary = notebook.updateDictionary(note, oldWords || (oldNote ? oldNote.words() : Immutable.Set<string>([])));
   const notes = notebook.notes.set(note.title.toLowerCase(), note);
   return new Notebook(notes, dictionary);
+}
+
+export function clone (from: INote) : INote {
+  return new Note(from.title, from.content, from.uuid, from.createdAt, from.modifiedAt);
+}
+
+
+export function words (note: INote) : Immutable.Set<string> {
+  const words = note.content.toLowerCase()
+    .replace(/((\W)(\s|$))/g, '')
+    .split(/\s+/g)
+    || [];
+  return Immutable.Set<string>(words);
 }

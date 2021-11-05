@@ -3,6 +3,7 @@ import Mention from './Mention';
 console.log("Mention", Mention);
 import NotebookItem from './NotebookItem';
 import INote from './INote';
+import { clone, words } from './Utils';
 
 /**
  * Note class is the holder of Mentions.
@@ -22,16 +23,15 @@ class Note extends NotebookItem implements INote {
   /**
    * Return all the words in the content.
    */
-  public words (prev: boolean = false) : Immutable.Set<string> {
-    const words = this.content.toLowerCase().replace(/((\W)(\s|$))/g, '').split(/\s+/g) || [];
-    return Immutable.Set<string>(words);
+  public words () : Immutable.Set<string> {
+    return words(this);
   }
 
   /**
    * Return all the words in the content.
    */
-  public clone (from?: Note) : Note {
-    return new Note(this.title, this.content, (from && from.uuid) || this.uuid, this.createdAt, this.modifiedAt);
+  public clone () : INote {
+    return clone(this);
   }
 }
 
