@@ -2,12 +2,13 @@ import Immutable from 'immutable';
 import Mention from './Mention';
 console.log("Mention", Mention);
 import NotebookItem from './NotebookItem';
+import INote from './INote';
 
 /**
  * Note class is the holder of Mentions.
  * @class
  */
-class Note extends NotebookItem {
+class Note extends NotebookItem implements INote {
 
   public title: string;
   public content: string = '';

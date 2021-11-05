@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import Note from './Note';
 import Mention from './Mention';
+import Notebook from './Notebook';
 
 export type Words = {
   gone: Immutable.Set<string>;
@@ -68,4 +69,16 @@ export function mentions(note: Note, notes: Immutable.Map<string, Note>) : Immut
  */
 export function references (note: Note, notes: Immutable.Map<string, Note>, dictionary: Immutable.Map<string, Immutable.Set<string>>) : Immutable.Set<Note|undefined> {
   return dictionary.get(note.title.toLowerCase(), Immutable.Set<string>()).map(title => notes.get(title.toLowerCase()))
+}
+
+
+/**
+ * Add or Update the given note to the notebook:
+ * this will recalculate all the mentionses as well.
+ */
+export function update(notebook: Notebook, note: Note, oldWords?: Immutable.Set<string>) : Notebook {
+  const oldNote = notebook.get(note.title);
+  const dictionary = notebook.updateDictionary(note, oldWords || (oldNote ? oldNote.words() : Immutable.Set<string>([])));
+  const notes = notebook.notes.set(note.title.toLowerCase(), note);
+  return new Notebook(notes, dictionary);
 }

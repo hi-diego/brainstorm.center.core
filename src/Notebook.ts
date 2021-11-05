@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import Note from './Note';
 import Mention from './Mention';
-import { wordsDiff, updateDictionary, mentions, references } from './Utils';
+import { wordsDiff, updateDictionary, mentions, references, update } from './Utils';
 
 /**
  * Notebook.
@@ -50,11 +50,7 @@ class Notebook {
    * this will recalculate all the mentionses as well.
    */
   public update(note: Note, oldWords?: Immutable.Set<string>): Notebook {
-    const oldNote = this.get(note.title);
-    const dictionary = this.updateDictionary(note, oldWords || (oldNote ? oldNote.words() : Immutable.Set<string>([])));
-    const notes = this.notes.set(note.title.toLowerCase(), note);
-    // window.localStorage.setItem(this.getLocalStorageName(), JSON.stringify(this.notes.toJSON()));
-    return new Notebook(notes, dictionary);
+    return update(this, note, oldWords);
   }
 
   /**
