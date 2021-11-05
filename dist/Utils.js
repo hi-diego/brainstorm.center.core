@@ -3,9 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.references = exports.mentions = exports.updateDictionary = exports.uuid = exports.wordsDiff = void 0;
+exports.words = exports.clone = exports.update = exports.references = exports.mentions = exports.updateDictionary = exports.uuid = exports.wordsDiff = void 0;
 const immutable_1 = __importDefault(require("immutable"));
+const Note_1 = __importDefault(require("./Note"));
 const Mention_1 = __importDefault(require("./Mention"));
+const Notebook_1 = __importDefault(require("./Notebook"));
 function wordsDiff(a, b) {
     return {
         gone: a.subtract(b),
@@ -23,9 +25,9 @@ function uuid() {
     return uuid;
 }
 exports.uuid = uuid;
-function updateDictionary(note, dictionary, oldNote) {
+function updateDictionary(note, dictionary, oldWords) {
     var dic = immutable_1.default.Map(dictionary);
-    const words = wordsDiff(oldNote.words(), note.words());
+    const words = wordsDiff(oldWords, note.words());
     words.gone.forEach((word) => {
         const set = (dic.get(word, immutable_1.default.Set())).delete(note.title);
         if (set.isEmpty())
@@ -41,15 +43,32 @@ function updateDictionary(note, dictionary, oldNote) {
 }
 exports.updateDictionary = updateDictionary;
 function mentions(note, notes) {
-    console.log(notes.toArray(), note.words().toArray());
     return notes
         .filter((v, k) => note.words().has(k.toLowerCase()))
         .toSet()
-        .map(n => new Mention_1.default(note, n, n.title.toLowerCase()))
-        .concat(note.mentions);
+        .map(n => new Mention_1.default(note, n, n.title.toLowerCase()));
 }
 exports.mentions = mentions;
 function references(note, notes, dictionary) {
     return dictionary.get(note.title.toLowerCase(), immutable_1.default.Set()).map(title => notes.get(title.toLowerCase()));
 }
 exports.references = references;
+function update(notebook, note, oldWords) {
+    const oldNote = notebook.get(note.title);
+    const dictionary = notebook.updateDictionary(note, oldWords || (oldNote ? oldNote.words() : immutable_1.default.Set([])));
+    const notes = notebook.notes.set(note.title.toLowerCase(), note);
+    return new Notebook_1.default(notes, dictionary);
+}
+exports.update = update;
+function clone(from) {
+    return new Note_1.default(from.title, from.content, from.uuid, from.createdAt, from.modifiedAt);
+}
+exports.clone = clone;
+function words(note) {
+    const words = note.content.toLowerCase()
+        .replace(/((\W)(\s|$))/g, '')
+        .split(/\s+/g)
+        || [];
+    return immutable_1.default.Set(words);
+}
+exports.words = words;

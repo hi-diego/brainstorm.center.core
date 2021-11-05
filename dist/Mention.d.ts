@@ -1,10 +1,10 @@
-import Note from './Note';
+import INote from './INote';
 import NotebookItem from './NotebookItem';
 declare class Mention extends NotebookItem {
-    from: Note;
-    to: Note;
+    from: INote;
+    to: INote;
     key: string;
     createdByUser: boolean;
-    constructor(from: Note, to: Note, key: string, createdByUser?: boolean, uuid?: string, createdAt?: Date, modifiedAt?: Date);
+    constructor(from: INote, to: INote, key: string, createdByUser?: boolean, uuid?: string, createdAt?: Date, modifiedAt?: Date);
 }
 export default Mention;

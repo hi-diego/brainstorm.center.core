@@ -13,12 +13,19 @@ class Notebook {
         this.name = 'root';
         this.onUpdate = () => null;
     }
-    update(n) {
-        const oldNote = this.notes.get(n.title) || new Note_1.default('', '');
-        const note = n.clone(oldNote);
-        const dictionary = this.updateDictionary(note, oldNote);
-        const notes = this.notes.set(note.title.toLowerCase(), note);
-        return new Notebook(notes, dictionary);
+    update(note, oldWords) {
+        return Utils_1.update(this, note, oldWords);
+    }
+    get(title) {
+        return this.notes.get(title.toLowerCase());
+    }
+    set(note) {
+        this.notes.set(note.title.toLowerCase(), note);
+    }
+    add(notes) {
+        var notebook = this;
+        notes.forEach((note) => (notebook = notebook.update(note)));
+        return notebook;
     }
     getLocalStorageName() {
         const path = window.location.pathname && window.location.pathname !== '/'
@@ -26,15 +33,15 @@ class Notebook {
             : '';
         return `brainstorm.center/${path}`;
     }
-    updateDictionary(note, oldNote) {
-        return Utils_1.updateDictionary(note, this.dictionary, oldNote);
+    updateDictionary(note, oldWords) {
+        return Utils_1.updateDictionary(note, this.dictionary, oldWords);
     }
     load(notebookName = 'root') {
         this.name = notebookName;
         const notes = JSON.parse(window.localStorage.getItem(this.getLocalStorageName()) || '{}');
         for (const title in notes) {
             const n = notes[title];
-            const note = new Note_1.default(n.title, n._content, n.uuid, immutable_1.default.Set(n.userMentions), n.createdAt);
+            const note = new Note_1.default(n.title, n._content, n.uuid, n.createdAt);
         }
     }
     reload(notebookName = 'root') {

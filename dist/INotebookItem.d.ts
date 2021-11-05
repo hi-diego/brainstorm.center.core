@@ -1,5 +1,5 @@
 export default interface INotebookItem {
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    modifiedAt: Date;
     uuid: string;
 }
