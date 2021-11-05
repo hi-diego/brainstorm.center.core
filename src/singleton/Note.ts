@@ -24,12 +24,6 @@ class Note extends NotebookItem implements INote {
    */
   constructor (title: string, content: string, uuid?: string, createdAt?: Date, modifiedAt?: Date) {
     super(uuid, createdAt, modifiedAt);
-    // const old: INote|undefined = Notebook.get(title);
-    // if (old) {
-    //   old.title = title;
-    //   old.content = content;
-    //   return old;
-    // }
     this.title = title;
     this.content = content;
   }
@@ -100,6 +94,10 @@ export default Note;
  * @class
  */
 export const NoteProxyHandler = {
+  /**
+   * Note class is the holder of Mentions.
+   * @class
+   */
   construct: (target: any, args: any[]) => {
     const old: any = Notebook.get(args[0]);
     if (old) return old.setContent(args[1]);
