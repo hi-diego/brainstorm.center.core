@@ -2,7 +2,6 @@ import Notebook from '../src/Notebook';
 import Note from '../src/Note';
 import { expect } from 'chai';
 
-// console.log('Notebook', Notebook);
 describe('Notebook', () => {
   it('#new', () => {
     const notebook = new Notebook();

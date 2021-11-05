@@ -59,8 +59,8 @@ export function mentions(note: Note, notes: Immutable.Map<string, Note>) : Immut
   return notes
     .filter((v, k) => note.words().has(k.toLowerCase()))
     .toSet()
-    .map(n => new Mention(note, n, n.title.toLowerCase()))
-    .concat(note.mentions);
+    .map(n => new Mention(note, n, n.title.toLowerCase()));
+    //.concat(note.mentions);
 }
 
 /**

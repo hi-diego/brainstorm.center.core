@@ -49,9 +49,11 @@ class Notebook {
    * Add or Update the given note to the notebook:
    * this will recalculate all the mentionses as well.
    */
-  public update(note: Note): Notebook {
+  public update(note: Note, old: Note|null = null): Notebook {
     const oldNote = this.get(note.title);
-    const dictionary = this.updateDictionary(note, oldNote || new Note('', ''));
+    // console.log('oldNote:', oldNote);
+    // console.log('note:', note);
+    const dictionary = this.updateDictionary(note, old || oldNote || new Note('', ''));
     const notes = this.notes.set(note.title.toLowerCase(), note);
     // window.localStorage.setItem(this.getLocalStorageName(), JSON.stringify(this.notes.toJSON()));
     return new Notebook(notes, dictionary);
@@ -111,7 +113,7 @@ class Notebook {
     const notes = JSON.parse(window.localStorage.getItem(this.getLocalStorageName()) || '{}')
     for (const title in notes) {
       const n = notes[title];
-      const note = new Note(n.title, n._content, n.uuid, Immutable.Set<Mention>(n.userMentions), n.createdAt);
+      const note = new Note(n.title, n._content, n.uuid, n.createdAt);
     }
   }
 

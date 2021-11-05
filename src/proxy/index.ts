@@ -1,1 +1,2 @@
-import Note from './NoteProxy';
+export { NoteProxy } from './NoteProxy';
+export { SingletonNotebook } from './SingletonNotebook';
